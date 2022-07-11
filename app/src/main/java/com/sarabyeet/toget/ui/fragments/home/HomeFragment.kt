@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.airbnb.epoxy.EpoxyTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import com.sarabyeet.toget.databinding.FragmentHomeBinding
 import com.sarabyeet.toget.db.model.ItemEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
@@ -37,6 +39,10 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
         sharedViewModel.itemListLiveData.observe(viewLifecycleOwner) { itemEntityList ->
             controller.itemEntityList = itemEntityList as ArrayList<ItemEntity>
         }
+
+        // Swipe-to-delete Epoxy
+        swipeToDelete()
+
     }
 
     override fun onDestroyView() {
@@ -44,11 +50,35 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
         _binding = null
     }
 
-    override fun onDeleteItemEntity(item: ItemEntity) {
-        //todo setup
+    private fun swipeToDelete() {
+        EpoxyTouchHelper.initSwiping(binding.rvHome)
+            .right()
+            .withTarget(HomeEpoxyController.ItemEntityEpoxyModel::class.java)
+            .andCallbacks(object :
+                EpoxyTouchHelper.SwipeCallbacks<HomeEpoxyController.ItemEntityEpoxyModel>() {
+                override fun onSwipeCompleted(
+                    model: HomeEpoxyController.ItemEntityEpoxyModel?,
+                    itemView: View?,
+                    position: Int,
+                    direction: Int,
+                ) {
+                    val deletedItem = model?.itemEntity ?: return
+                    sharedViewModel.deleteItem(deletedItem)
+                    // Making a Snack-bar with undo functionality
+                    showSnackBarWithUndo(deletedItem)
+                }
+            })
+    }
+
+    private fun showSnackBarWithUndo(item: ItemEntity){
+        Snackbar.make(binding.clayout, "Item has been deleted", Snackbar.LENGTH_SHORT)
+            .setAction("Undo") {
+                sharedViewModel.insertItem(item)
+            }
+            .show()
     }
 
     override fun onBumpPriority(item: ItemEntity) {
-        //todo setup
+        //Todo implement this
     }
 }

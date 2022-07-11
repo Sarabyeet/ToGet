@@ -16,6 +16,8 @@ class ToGetViewModel : ViewModel() {
     private var _itemListLiveData = MutableLiveData<List<ItemEntity>>()
     val itemListLiveData: LiveData<List<ItemEntity>> = _itemListLiveData
 
+    val transactionLiveData = MutableLiveData<Boolean>()
+
     fun init(appDatabase: AppDatabase) {
         itemRepository = ToGetRepository(appDatabase)
 
@@ -30,6 +32,7 @@ class ToGetViewModel : ViewModel() {
         viewModelScope.launch {
             itemRepository.insertItem(itemEntity)
         }
+
     }
 
     fun deleteItem(itemEntity: ItemEntity) {

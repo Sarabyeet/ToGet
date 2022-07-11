@@ -39,8 +39,8 @@ class HomeEpoxyController(
             return
         }
 
-        itemEntityList.forEachIndexed { index, itemEntity ->
-            ItemEntityEpoxyModel(itemEntity, itemEntityActions).id("$index").addTo(this)
+        itemEntityList.forEach { itemEntity ->
+            ItemEntityEpoxyModel(itemEntity, itemEntityActions).id(itemEntity.id).addTo(this)
         }
     }
 
@@ -56,9 +56,7 @@ class HomeEpoxyController(
                 descriptionTextView.isVisible = true
                 descriptionTextView.text = itemEntity.description
             }
-            deleteButton.setOnClickListener {
-                itemEntityActions.onDeleteItemEntity(itemEntity)
-            }
+
             priorityTextView.setOnClickListener {
                 itemEntityActions.onBumpPriority(itemEntity)
             }
