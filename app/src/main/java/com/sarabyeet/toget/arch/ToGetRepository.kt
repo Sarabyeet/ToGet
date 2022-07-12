@@ -18,4 +18,8 @@ class ToGetRepository(private val database: AppDatabase) {
         database.itemDao().delete(itemEntity)
     }
 
+    suspend fun updateItem(itemEntity: ItemEntity){
+        database.itemDao().update(itemEntity)
+    }
+
 }

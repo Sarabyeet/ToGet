@@ -41,4 +41,10 @@ class ToGetViewModel : ViewModel() {
         }
     }
 
+    fun updateItem(itemEntity: ItemEntity) {
+        viewModelScope.launch {
+            itemRepository.updateItem(itemEntity)
+        }
+    }
+
 }

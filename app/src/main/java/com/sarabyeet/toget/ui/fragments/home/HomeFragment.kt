@@ -70,7 +70,7 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
             })
     }
 
-    private fun showSnackBarWithUndo(item: ItemEntity){
+    private fun showSnackBarWithUndo(item: ItemEntity) {
         Snackbar.make(binding.clayout, "Item has been deleted", Snackbar.LENGTH_SHORT)
             .setAction("Undo") {
                 sharedViewModel.insertItem(item)
@@ -79,6 +79,12 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
     }
 
     override fun onBumpPriority(item: ItemEntity) {
-        //Todo implement this
+        val currentPriority = item.priority
+        var newPriority = currentPriority + 1
+        if (newPriority > 3) {
+            newPriority = 1
+        }
+        val updatedPriority = item.copy(priority = newPriority)
+        sharedViewModel.updateItem(updatedPriority)
     }
 }
