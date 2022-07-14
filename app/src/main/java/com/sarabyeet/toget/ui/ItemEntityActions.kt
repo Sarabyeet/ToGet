@@ -4,4 +4,5 @@ import com.sarabyeet.toget.db.model.ItemEntity
 
 interface ItemEntityActions {
     fun onBumpPriority(item:ItemEntity)
+    fun onClickItem(item: ItemEntity)
 }

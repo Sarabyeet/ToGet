@@ -18,5 +18,11 @@
         android:id="@+id/addItemFragment"
         android:name="com.sarabyeet.toget.ui.fragments.add.AddItemFragment"
         android:label="Add Item"
-        tools:layout="@layout/fragment_add_item"/>
+        tools:layout="@layout/fragment_add_item">
+        <argument
+            android:name="selectedItemId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

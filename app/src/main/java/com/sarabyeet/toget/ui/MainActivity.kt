@@ -1,9 +1,6 @@
 package com.sarabyeet.toget.ui
 
-import android.content.Context
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -17,7 +14,7 @@ import com.sarabyeet.toget.db.AppDatabase
 class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
-    lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

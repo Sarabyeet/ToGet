@@ -1,5 +1,6 @@
 package com.sarabyeet.toget.ui.fragments.home
 
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -80,6 +81,10 @@ class HomeEpoxyController(
                 itemEntityActions.onBumpPriority(itemEntity)
             }
 
+            root.setOnClickListener {
+                itemEntityActions.onClickItem(itemEntity)
+                Log.d("rootOn", "On card view clicked")
+            }
             val colorDrawable = when (itemEntity.priority) {
                 1 -> R.drawable.circle_green
                 2 -> R.drawable.circle_yellow
@@ -94,7 +99,7 @@ class HomeEpoxyController(
                 3 -> R.color.Red
                 else -> R.color.purple_200
             }
-            cardViewHome.strokeColor = ContextCompat.getColor(root.context, cardStrokeColor)
+            root.strokeColor = ContextCompat.getColor(root.context, cardStrokeColor)
         }
     }
 

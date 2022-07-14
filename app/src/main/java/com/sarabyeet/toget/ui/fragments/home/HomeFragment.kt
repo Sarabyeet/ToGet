@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.google.android.material.snackbar.Snackbar
+import com.sarabyeet.toget.R
 import com.sarabyeet.toget.databinding.FragmentHomeBinding
 import com.sarabyeet.toget.db.model.ItemEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
@@ -42,8 +43,8 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
 
         // Swipe-to-delete Epoxy
         swipeToDelete()
-
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -76,6 +77,11 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
                 sharedViewModel.insertItem(item)
             }
             .show()
+    }
+
+    override fun onClickItem(item: ItemEntity) {
+        val directions = HomeFragmentDirections.actionHomeFragmentToAddItemFragment(item.id)
+        findNavController().navigate(directions)
     }
 
     override fun onBumpPriority(item: ItemEntity) {

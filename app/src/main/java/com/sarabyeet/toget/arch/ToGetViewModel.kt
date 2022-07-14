@@ -16,6 +16,7 @@ class ToGetViewModel : ViewModel() {
     private var _itemListLiveData = MutableLiveData<List<ItemEntity>>()
     val itemListLiveData: LiveData<List<ItemEntity>> = _itemListLiveData
 
+    // used to check whether the insert or update item to database was successfully performed or not
     val transactionLiveData = MutableLiveData<Boolean>()
 
     fun init(appDatabase: AppDatabase) {
@@ -32,7 +33,6 @@ class ToGetViewModel : ViewModel() {
         viewModelScope.launch {
             itemRepository.insertItem(itemEntity)
         }
-
     }
 
     fun deleteItem(itemEntity: ItemEntity) {
