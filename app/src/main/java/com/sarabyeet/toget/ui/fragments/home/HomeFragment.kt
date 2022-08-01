@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.google.android.material.snackbar.Snackbar
-import com.sarabyeet.toget.R
 import com.sarabyeet.toget.databinding.FragmentHomeBinding
 import com.sarabyeet.toget.db.model.ItemEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
 import com.sarabyeet.toget.ui.fragments.BaseFragment
-import kotlin.collections.ArrayList
 
 class HomeFragment : BaseFragment(), ItemEntityActions {
     private var _binding: FragmentHomeBinding? = null

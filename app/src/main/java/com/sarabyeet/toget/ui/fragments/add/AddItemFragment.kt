@@ -2,12 +2,14 @@ package com.sarabyeet.toget.ui.fragments.add
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.sarabyeet.toget.R
@@ -42,9 +44,40 @@ class AddItemFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Triggering the save action
         binding.saveBtn.setOnClickListener {
             saveItemToDatabase()
         }
+
+        // Setting up the seekbar - fetching current title, adding quantity in it [quantity] and updating that text
+        // as the seek bar value changes
+        binding.quantitySeekbar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val currentText = binding.titleEditText.text.toString().trim()
+                if (currentText.isEmpty()){
+                    return // Null title
+                }
+
+                val endIndex = currentText.indexOf("[")-1
+                val newText = if (endIndex > 0 ){
+                    "${currentText.substring(0, endIndex)} [$progress]"
+                } else {
+                    "$currentText [$progress]"
+                }
+
+                val sanitizedText = newText.replace(" [1]", "")
+                binding.titleEditText.setText(sanitizedText)
+                binding.titleEditText.setSelection(sanitizedText.length)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // Nothing to do here
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // Nothing to do here
+            }
+        })
+
 
         // Show Item is saved, make a snack-bar, set fields to be empty
         sharedViewModel.transactionLiveData.observe(viewLifecycleOwner) { complete ->
@@ -76,6 +109,7 @@ class AddItemFragment : BaseFragment() {
             isEditMode = true
 
             binding.titleEditText.setText(itemEntity.title)
+            binding.titleEditText.setSelection(itemEntity.title.length)
             binding.descriptionEditText.setText(itemEntity.description)
             when (itemEntity.priority) {
                 1 -> binding.radioGroup.check(R.id.lowPriorityBtn)
@@ -85,8 +119,20 @@ class AddItemFragment : BaseFragment() {
 
             binding.saveBtn.text = "Update"
             mainActivity.supportActionBar?.title = "Update Item"
-        }
 
+            val itemTitle = binding.titleEditText.text.toString()
+            if (itemTitle.contains("[")){
+                val startIndex = itemTitle.indexOf("[") + 1 // because we want to find what comes after [, ie. [2 - Here two comes after [
+                val endIndex = itemTitle.indexOf("]")
+
+                try {
+                    val progress = itemTitle.substring(startIndex, endIndex).toInt()
+                    binding.quantitySeekbar.progress = progress
+                }catch (e: Exception){
+                    Log.d("AddItem", e.stackTraceToString())
+                }
+            }
+        }
     }
 
 
@@ -117,16 +163,13 @@ class AddItemFragment : BaseFragment() {
 
         // Update and save an item
         if (isEditMode) {
-            val itemEntity = selectedItem?.copy(
+            val itemEntity = selectedItem!!.copy(
                 title = itemTitle,
                 description = itemDescription,
                 priority = itemPriority,
             )
-
-            if (itemEntity != null) {
-                sharedViewModel.updateItem(itemEntity)
-                sharedViewModel.transactionLiveData.postValue(true)
-            }
+            sharedViewModel.updateItem(itemEntity)
+            sharedViewModel.transactionLiveData.postValue(true)
             return
         }
 
@@ -148,6 +191,7 @@ class AddItemFragment : BaseFragment() {
         sharedViewModel.transactionLiveData.postValue(false)
         super.onPause()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

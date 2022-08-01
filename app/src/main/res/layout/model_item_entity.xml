@@ -7,10 +7,10 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginTop="8dp"
-    app:cardElevation="2dp"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
     android:backgroundTint="?attr/colorOnPrimarySurface"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
     app:strokeColor="@color/black"
     app:strokeWidth="3px">
 
@@ -39,8 +39,9 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
             android:maxLines="5"
-            android:textSize="14sp"
             android:textColor="?attr/colorOnPrimary"
+            android:textSize="14sp"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/priorityTextView"
             app:layout_constraintHorizontal_bias="0.0"

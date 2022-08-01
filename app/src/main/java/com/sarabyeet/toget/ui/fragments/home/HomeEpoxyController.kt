@@ -1,14 +1,13 @@
 package com.sarabyeet.toget.ui.fragments.home
 
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyController
 import com.sarabyeet.toget.R
+import com.sarabyeet.toget.addHeaderModel
 import com.sarabyeet.toget.databinding.ModelEmptyStateBinding
 import com.sarabyeet.toget.databinding.ModelItemEntityBinding
-import com.sarabyeet.toget.databinding.ModelItemHeaderBinding
 import com.sarabyeet.toget.db.model.ItemEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
 import com.sarabyeet.toget.ui.epoxy.LoadingEpoxyModel
@@ -49,8 +48,7 @@ class HomeEpoxyController(
 
             if (itemEntity.priority != currentPriority){
                 currentPriority = itemEntity.priority
-                val text = getHeaderTextForPriority(itemEntity.priority)
-                ItemHeaderEpoxy(text).id("${text}_priority").addTo(this)
+                addHeaderModel(getHeaderTextForPriority(itemEntity.priority))
             }
             ItemEntityEpoxyModel(itemEntity, itemEntityActions).id(itemEntity.id).addTo(this)
         }
@@ -83,7 +81,6 @@ class HomeEpoxyController(
 
             root.setOnClickListener {
                 itemEntityActions.onClickItem(itemEntity)
-                Log.d("rootOn", "On card view clicked")
             }
             val colorDrawable = when (itemEntity.priority) {
                 1 -> R.drawable.circle_green
@@ -109,13 +106,4 @@ class HomeEpoxyController(
             // nothing to do here
         }
     }
-
-    data class ItemHeaderEpoxy(
-        val headerText: String,
-    ) : ViewBindingKotlinModel<ModelItemHeaderBinding>(R.layout.model_item_header) {
-        override fun ModelItemHeaderBinding.bind() {
-            headerTitle.text = headerText
-        }
-    }
-
 }

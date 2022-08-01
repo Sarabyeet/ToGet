@@ -9,14 +9,18 @@
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/drawable/circle_red.xml" value="0.193" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/drawable/circle_yellow.xml" value="0.193" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/drawable/ic_delete_24.xml" value="0.2235" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/drawable/ic_home_24.xml" value="0.3215" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/drawable/ic_person_24.xml" value="0.3085" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout-v28/model_item_entity.xml" value="0.322463768115942" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/activity_main.xml" value="0.26992753623188404" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_add_item.xml" value="0.36096014492753625" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_home.xml" value="0.17831813576494426" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_profile.xml" value="0.32065217391304346" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_empty_state.xml" value="0.322463768115942" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_item_entity.xml" value="0.42733188720173537" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_item_header.xml" value="0.33" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_loading.xml" value="0.31521739130434784" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.37083333333333335" />
       </map>
     </option>
   </component>

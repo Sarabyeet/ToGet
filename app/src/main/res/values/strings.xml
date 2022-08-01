@@ -6,4 +6,6 @@
     <string name="save">Save</string>
     <string name="medium">Medium</string>
     <string name="low">Low</string>
+    <string name="quantity">Quantity</string>
+    <string name="priority">Priority</string>
 </resources>

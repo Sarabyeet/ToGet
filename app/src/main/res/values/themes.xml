@@ -16,7 +16,6 @@
         <item name="colorOnSurface">@color/secondaryDarkColor1</item>
         <item name="colorOnPrimarySurface">@color/primaryLightColor1</item>
         <item name="android:navigationBarColor">@color/primaryColor1</item>
-
     </style>
 
 

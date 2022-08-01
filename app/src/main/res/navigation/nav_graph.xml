@@ -15,6 +15,13 @@
             app:destination="@id/addItemFragment" />
     </fragment>
     <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.sarabyeet.toget.ui.fragments.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+
+    </fragment>
+    <fragment
         android:id="@+id/addItemFragment"
         android:name="com.sarabyeet.toget.ui.fragments.add.AddItemFragment"
         android:label="Add Item"
