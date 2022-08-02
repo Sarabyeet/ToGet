@@ -72,7 +72,7 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
     private fun showSnackBarWithUndo(item: ItemEntity) {
         Snackbar.make(binding.clayout, "Item has been deleted", Snackbar.LENGTH_SHORT)
             .setAction("Undo") {
-                sharedViewModel.insertItem(item)
+                sharedViewModel.reInsertItem(item)
             }
             .show()
     }

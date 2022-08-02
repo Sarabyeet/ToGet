@@ -1,20 +1,19 @@
 package com.sarabyeet.toget.ui.fragments.add
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.sarabyeet.toget.R
+import com.sarabyeet.toget.arch.ToGetEvents
 import com.sarabyeet.toget.databinding.FragmentAddItemBinding
 import com.sarabyeet.toget.db.model.ItemEntity
+import com.sarabyeet.toget.showKeyboard
 import com.sarabyeet.toget.ui.fragments.BaseFragment
 import java.util.*
 
@@ -45,9 +44,7 @@ class AddItemFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Triggering the save action
-        binding.saveBtn.setOnClickListener {
-            saveItemToDatabase()
-        }
+        binding.saveBtn.setOnClickListener { saveItemToDatabase() }
 
         // Setting up the seekbar - fetching current title, adding quantity in it [quantity] and updating that text
         // as the seek bar value changes
@@ -80,7 +77,7 @@ class AddItemFragment : BaseFragment() {
 
 
         // Show Item is saved, make a snack-bar, set fields to be empty
-        sharedViewModel.transactionLiveData.observe(viewLifecycleOwner) { complete ->
+        /*sharedViewModel.transactionLiveData.observe(viewLifecycleOwner) { complete ->
             if (complete) {
                 /** If the item was updated, just navigate up */
                 if (isEditMode) {
@@ -98,6 +95,31 @@ class AddItemFragment : BaseFragment() {
 
                 binding.descriptionEditText.text = null
                 binding.radioGroup.check(R.id.lowPriorityBtn)
+            }
+        } */
+
+        lifecycleScope.launchWhenStarted {
+            sharedViewModel.eventFlow.collect { event ->
+                when(event){
+                    is ToGetEvents.DbTransaction -> {
+                        /** If the item was updated, just navigate up */
+                        if (isEditMode) {
+                            navigateUp()
+                            Snackbar.make(requireView(), "Item updated successfully", Snackbar.LENGTH_SHORT)
+                                .show()
+                            return@collect
+                        }
+
+                        /** Else set all the fields to null */
+                        Snackbar.make(requireView(), "Item saved successfully", Snackbar.LENGTH_SHORT)
+                            .show()
+                        binding.titleEditText.text = null
+                        binding.titleEditText.requestFocus()
+
+                        binding.descriptionEditText.text = null
+                        binding.radioGroup.check(R.id.lowPriorityBtn)
+                    }
+                }
             }
         }
 
@@ -135,15 +157,6 @@ class AddItemFragment : BaseFragment() {
         }
     }
 
-
-    private fun EditText.showKeyboard() {
-        post {
-            requestFocus()
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-        }
-    }
-
     /** Saves or updates an item */
     private fun saveItemToDatabase() {
         val itemTitle = binding.titleEditText.text.toString().trim()
@@ -169,7 +182,7 @@ class AddItemFragment : BaseFragment() {
                 priority = itemPriority,
             )
             sharedViewModel.updateItem(itemEntity)
-            sharedViewModel.transactionLiveData.postValue(true)
+            //sharedViewModel.transactionLiveData.postValue(true)
             return
         }
 
@@ -183,13 +196,8 @@ class AddItemFragment : BaseFragment() {
             categoryId = "" // todo implement later
         )
         sharedViewModel.insertItem(itemEntity)
-        sharedViewModel.transactionLiveData.postValue(true)
+        //sharedViewModel.transactionLiveData.postValue(true)
 
-    }
-
-    override fun onPause() {
-        sharedViewModel.transactionLiveData.postValue(false)
-        super.onPause()
     }
 
     override fun onDestroyView() {
