@@ -39,5 +39,11 @@
         android:id="@+id/addCategoryFragment"
         android:name="com.sarabyeet.toget.ui.fragments.profile.AddCategoryFragment"
         android:label="Add Category"
-        tools:layout="@layout/fragment_add_category"/>
+        tools:layout="@layout/fragment_add_category">
+        <argument
+            android:name="selectedCategoryId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
 </navigation>

@@ -8,4 +8,5 @@
     <string name="low">Low</string>
     <string name="quantity">Quantity</string>
     <string name="priority">Priority</string>
+    <string name="category">Category</string>
 </resources>

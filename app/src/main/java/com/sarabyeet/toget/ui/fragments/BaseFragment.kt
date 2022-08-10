@@ -16,5 +16,4 @@ abstract class BaseFragment: Fragment() {
     protected fun navigateUp() {
         mainActivity.navController.navigateUp()
     }
-
 }

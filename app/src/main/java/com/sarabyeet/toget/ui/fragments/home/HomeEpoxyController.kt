@@ -6,9 +6,10 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyController
 import com.sarabyeet.toget.R
 import com.sarabyeet.toget.addHeaderModel
+import com.sarabyeet.toget.arch.ToGetEvents
 import com.sarabyeet.toget.databinding.ModelEmptyStateBinding
 import com.sarabyeet.toget.databinding.ModelItemEntityBinding
-import com.sarabyeet.toget.db.model.ItemEntity
+import com.sarabyeet.toget.db.model.ItemWithCategoryEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
 import com.sarabyeet.toget.ui.epoxy.LoadingEpoxyModel
 import com.sarabyeet.travelapp.ui.epoxy.ViewBindingKotlinModel
@@ -17,72 +18,59 @@ class HomeEpoxyController(
     private val itemEntityActions: ItemEntityActions,
 ) : EpoxyController() {
 
-    var isLoading: Boolean = true
+    var viewState = ToGetEvents.HomeViewState(isLoading = true)
         set(value) {
             field = value
-            if (field) {
-                requestModelBuild()
-            }
-        }
-
-    var itemEntityList = ArrayList<ItemEntity>()
-        set(value) {
-            field = value
-            isLoading = false
             requestModelBuild()
         }
 
     override fun buildModels() {
-        if (isLoading) {
+        if (viewState.isLoading) {
             LoadingEpoxyModel().id("loading_state").addTo(this)
             return
         }
-        if (itemEntityList.isEmpty()) {
+        if (viewState.dataList.isEmpty()) {
             EmptyStateEpoxy().id("empty_state").addTo(this)
             return
         }
 
-        var currentPriority = -1
-
-        itemEntityList.sortedByDescending { it.priority }.forEach { itemEntity ->
-
-            if (itemEntity.priority != currentPriority){
-                currentPriority = itemEntity.priority
-                addHeaderModel(getHeaderTextForPriority(itemEntity.priority))
+        viewState.dataList.forEach { dataItem ->
+            if (dataItem.isHeader) {
+                addHeaderModel(dataItem.data as String)
+                return@forEach
             }
-            ItemEntityEpoxyModel(itemEntity, itemEntityActions).id(itemEntity.id).addTo(this)
+
+            val itemWithCategoryEntity = dataItem.data as ItemWithCategoryEntity
+            ItemEntityEpoxyModel(itemWithCategoryEntity, itemEntityActions)
+                .id(itemWithCategoryEntity.itemEntity.id)
+                .addTo(this)
         }
     }
 
-    private fun getHeaderTextForPriority(priority: Int): String {
-        return when(priority){
-            1 -> "Low"
-            2 -> "Medium"
-            else -> "High"
-        }
-    }
 
     data class ItemEntityEpoxyModel(
-        val itemEntity: ItemEntity,
+        val item: ItemWithCategoryEntity,
         val itemEntityActions: ItemEntityActions,
     ) : ViewBindingKotlinModel<ModelItemEntityBinding>(R.layout.model_item_entity) {
         override fun ModelItemEntityBinding.bind() {
-            titleTextView.text = itemEntity.title
-            if (itemEntity.description == null) {
+            titleTextView.text = item.itemEntity.title
+            if (item.itemEntity.description == null) {
                 descriptionTextView.isGone = true
             } else {
                 descriptionTextView.isVisible = true
-                descriptionTextView.text = itemEntity.description
+                descriptionTextView.text = item.itemEntity.description
             }
 
             priorityTextView.setOnClickListener {
-                itemEntityActions.onBumpPriority(itemEntity)
+                itemEntityActions.onBumpPriority(item.itemEntity)
             }
 
+            categoryTextView.text = item.categoryEntity?.name
+
             root.setOnClickListener {
-                itemEntityActions.onClickItem(itemEntity)
+                itemEntityActions.onClickItem(item.itemEntity)
             }
-            val colorDrawable = when (itemEntity.priority) {
+            val colorDrawable = when (item.itemEntity.priority) {
                 1 -> R.drawable.circle_green
                 2 -> R.drawable.circle_yellow
                 3 -> R.drawable.circle_red
@@ -90,7 +78,7 @@ class HomeEpoxyController(
             }
             priorityTextView.setBackgroundResource(colorDrawable)
 
-            val cardStrokeColor = when (itemEntity.priority) {
+            val cardStrokeColor = when (item.itemEntity.priority) {
                 1 -> R.color.Green
                 2 -> R.color.Yellow
                 3 -> R.color.Red

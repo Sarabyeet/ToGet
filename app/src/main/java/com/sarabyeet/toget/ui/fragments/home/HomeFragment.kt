@@ -35,8 +35,12 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
         val controller = HomeEpoxyController(this)
         binding.rvHome.setController(controller)
 
-        sharedViewModel.itemListLiveData.observe(viewLifecycleOwner) { itemEntityList ->
-            controller.itemEntityList = itemEntityList as ArrayList<ItemEntity>
+//        sharedViewModel.itemWithCategoryLiveData.observe(viewLifecycleOwner) { itemEntityList ->
+//            controller.itemEntityList = itemEntityList as ArrayList<ItemWithCategoryEntity>
+//        }
+
+        sharedViewModel.homeViewState.observe(viewLifecycleOwner) { viewState ->
+            controller.viewState = viewState
         }
 
         // Swipe-to-delete Epoxy
@@ -61,7 +65,7 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
                     position: Int,
                     direction: Int,
                 ) {
-                    val deletedItem = model?.itemEntity ?: return
+                    val deletedItem = model?.item?.itemEntity ?: return
                     sharedViewModel.deleteItem(deletedItem)
                     // Making a Snack-bar with undo functionality
                     showSnackBarWithUndo(deletedItem)

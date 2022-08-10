@@ -3,6 +3,7 @@ package com.sarabyeet.toget.arch
 import com.sarabyeet.toget.db.AppDatabase
 import com.sarabyeet.toget.db.model.CategoryEntity
 import com.sarabyeet.toget.db.model.ItemEntity
+import com.sarabyeet.toget.db.model.ItemWithCategoryEntity
 import kotlinx.coroutines.flow.Flow
 
 class ToGetRepository(private val database: AppDatabase) {
@@ -10,6 +11,10 @@ class ToGetRepository(private val database: AppDatabase) {
     // region Item Entity
     fun getAllItems(): Flow<List<ItemEntity>> {
         return database.itemDao().getAllItems()
+    }
+
+    fun getAllItemWithCategory(): Flow<List<ItemWithCategoryEntity>> {
+        return database.itemDao().getAllItemWithCategory()
     }
 
     suspend fun insertItem(itemEntity: ItemEntity) {
@@ -42,5 +47,4 @@ class ToGetRepository(private val database: AppDatabase) {
         database.categoryDao().update(categoryEntity)
     }
     // endregion Category Entity
-
 }

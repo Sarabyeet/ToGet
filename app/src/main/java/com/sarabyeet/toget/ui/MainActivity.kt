@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setupWithNavController(bottomNavigationView, navController)
 
         // Adding destination changed listener to show/hide bottom bar
-        navController.addOnDestinationChangedListener{ navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+        navController.addOnDestinationChangedListener{ _: NavController, navDestination: NavDestination, _: Bundle? ->
 
             if (appBarConfiguration.topLevelDestinations.contains(navDestination.id)){
                 bottomNavigationView.isVisible = true

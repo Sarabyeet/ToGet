@@ -12,7 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.sarabyeet.toget.R
 import com.sarabyeet.toget.arch.ToGetEvents
 import com.sarabyeet.toget.databinding.FragmentAddItemBinding
+import com.sarabyeet.toget.db.model.CategoryEntity
 import com.sarabyeet.toget.db.model.ItemEntity
+import com.sarabyeet.toget.db.model.ItemWithCategoryEntity
 import com.sarabyeet.toget.showKeyboard
 import com.sarabyeet.toget.ui.fragments.BaseFragment
 import java.util.*
@@ -24,9 +26,9 @@ class AddItemFragment : BaseFragment() {
 
     private val safeArgs: AddItemFragmentArgs by navArgs()
 
-    private val selectedItem: ItemEntity? by lazy {
-        sharedViewModel.itemListLiveData.value?.find {
-            it.id == safeArgs.selectedItemId
+    private val selectedItem: ItemWithCategoryEntity? by lazy {
+        sharedViewModel.itemWithCategoryLiveData.value?.find {
+            it.itemEntity.id == safeArgs.selectedItemId
         }
     }
     private var isEditMode: Boolean = false
@@ -48,15 +50,16 @@ class AddItemFragment : BaseFragment() {
 
         // Setting up the seekbar - fetching current title, adding quantity in it [quantity] and updating that text
         // as the seek bar value changes
-        binding.quantitySeekbar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+        binding.quantitySeekbar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val currentText = binding.titleEditText.text.toString().trim()
-                if (currentText.isEmpty()){
+                if (currentText.isEmpty()) {
                     return // Null title
                 }
 
-                val endIndex = currentText.indexOf("[")-1
-                val newText = if (endIndex > 0 ){
+                val endIndex = currentText.indexOf("[") - 1
+                val newText = if (endIndex > 0) {
                     "${currentText.substring(0, endIndex)} [$progress]"
                 } else {
                     "$currentText [$progress]"
@@ -70,6 +73,7 @@ class AddItemFragment : BaseFragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
                 // Nothing to do here
             }
+
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 // Nothing to do here
             }
@@ -100,18 +104,22 @@ class AddItemFragment : BaseFragment() {
 
         lifecycleScope.launchWhenStarted {
             sharedViewModel.eventFlow.collect { event ->
-                when(event){
+                when (event) {
                     is ToGetEvents.DbTransaction -> {
                         /** If the item was updated, just navigate up */
                         if (isEditMode) {
                             navigateUp()
-                            Snackbar.make(requireView(), "Item updated successfully", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(requireView(),
+                                "Item updated successfully",
+                                Snackbar.LENGTH_SHORT)
                                 .show()
                             return@collect
                         }
 
                         /** Else set all the fields to null */
-                        Snackbar.make(requireView(), "Item saved successfully", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(requireView(),
+                            "Item saved successfully",
+                            Snackbar.LENGTH_SHORT)
                             .show()
                         binding.titleEditText.text = null
                         binding.titleEditText.requestFocus()
@@ -127,13 +135,13 @@ class AddItemFragment : BaseFragment() {
         binding.titleEditText.showKeyboard()
 
         /** Checking the passed in item and populating add item fragment with it's data */
-        selectedItem?.let { itemEntity ->
+        selectedItem?.let { item ->
             isEditMode = true
 
-            binding.titleEditText.setText(itemEntity.title)
-            binding.titleEditText.setSelection(itemEntity.title.length)
-            binding.descriptionEditText.setText(itemEntity.description)
-            when (itemEntity.priority) {
+            binding.titleEditText.setText(item.itemEntity.title)
+            binding.titleEditText.setSelection(item.itemEntity.title.length)
+            binding.descriptionEditText.setText(item.itemEntity.description)
+            when (item.itemEntity.priority) {
                 1 -> binding.radioGroup.check(R.id.lowPriorityBtn)
                 2 -> binding.radioGroup.check(R.id.mediumPriorityBtn)
                 else -> binding.radioGroup.check(R.id.highPriorityBtn)
@@ -143,18 +151,32 @@ class AddItemFragment : BaseFragment() {
             mainActivity.supportActionBar?.title = "Update Item"
 
             val itemTitle = binding.titleEditText.text.toString()
-            if (itemTitle.contains("[")){
-                val startIndex = itemTitle.indexOf("[") + 1 // because we want to find what comes after [, ie. [2 - Here two comes after [
+            if (itemTitle.contains("[")) {
+                val startIndex =
+                    itemTitle.indexOf("[") + 1 // because we want to find what comes after [, ie. [2 - Here two comes after [
                 val endIndex = itemTitle.indexOf("]")
 
                 try {
                     val progress = itemTitle.substring(startIndex, endIndex).toInt()
                     binding.quantitySeekbar.progress = progress
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     Log.d("AddItem", e.stackTraceToString())
                 }
             }
         }
+
+        // Setting up the Categories view in Add fragment
+        val categoriesViewStateController = CategoriesViewStateController { selectedId ->
+            sharedViewModel.onCategorySelected(selectedId)
+        }
+        binding.rvCategories.setController(categoriesViewStateController)
+
+        sharedViewModel.onCategorySelected(selectedItem?.itemEntity?.categoryId
+            ?: CategoryEntity.DEFAULT_CATEGORY_ID, showLoading = true)
+        sharedViewModel.categoriesViewStateLiveData.observe(viewLifecycleOwner) { viewState ->
+            categoriesViewStateController.viewState = viewState
+        }
+
     }
 
     /** Saves or updates an item */
@@ -174,12 +196,15 @@ class AddItemFragment : BaseFragment() {
             else -> 0
         }
 
+        val categoryId =
+            sharedViewModel.categoriesViewStateLiveData.value?.getCategoryId() ?: return
         // Update and save an item
         if (isEditMode) {
-            val itemEntity = selectedItem!!.copy(
+            val itemEntity = selectedItem!!.itemEntity.copy(
                 title = itemTitle,
                 description = itemDescription,
                 priority = itemPriority,
+                categoryId = categoryId
             )
             sharedViewModel.updateItem(itemEntity)
             //sharedViewModel.transactionLiveData.postValue(true)
@@ -193,11 +218,10 @@ class AddItemFragment : BaseFragment() {
             description = itemDescription,
             priority = itemPriority,
             createdAt = System.currentTimeMillis(),
-            categoryId = "" // todo implement later
+            categoryId = categoryId
         )
         sharedViewModel.insertItem(itemEntity)
         //sharedViewModel.transactionLiveData.postValue(true)
-
     }
 
     override fun onDestroyView() {
