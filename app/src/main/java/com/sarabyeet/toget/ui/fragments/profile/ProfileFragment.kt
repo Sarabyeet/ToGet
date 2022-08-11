@@ -36,6 +36,10 @@ class ProfileFragment : BaseFragment(), CategoryEntityActions {
             profileController.categories = categories
         }
         swipeToDelete()
+
+        binding.epoxyRecyclerView.postDelayed({
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToCustomColorFragment("High"))
+        }, 1_000)
     }
 
     private fun swipeToDelete() {
@@ -78,5 +82,9 @@ class ProfileFragment : BaseFragment(), CategoryEntityActions {
     override fun onClickCategory(category: CategoryEntity) {
         findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToAddCategoryFragment(
             category.id))
+    }
+
+    override fun onDeleteCategory(category: CategoryEntity) {
+        sharedViewModel.deleteCategory(category)
     }
 }

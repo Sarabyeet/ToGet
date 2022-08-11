@@ -1,16 +1,19 @@
 package com.sarabyeet.toget.ui.fragments.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.google.android.material.snackbar.Snackbar
+import com.sarabyeet.toget.R
 import com.sarabyeet.toget.databinding.FragmentHomeBinding
 import com.sarabyeet.toget.db.model.ItemEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
 import com.sarabyeet.toget.ui.fragments.BaseFragment
+import com.sarabyeet.toget.ui.fragments.home.bottomsheet.SortOrderBottomSheet
 
 class HomeFragment : BaseFragment(), ItemEntityActions {
     private var _binding: FragmentHomeBinding? = null
@@ -26,8 +29,27 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
+
+        // region Menu
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_home_fragment, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menuItemSort -> {
+                        SortOrderBottomSheet().show(childFragmentManager, null)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        // endregion Menu
+
         binding.fab.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddItemFragment())
         }
@@ -93,6 +115,6 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
             newPriority = 1
         }
         val updatedPriority = item.copy(priority = newPriority)
-        sharedViewModel.updateItem(updatedPriority)
+        sharedViewModel.updateItemPriority(updatedPriority)
     }
 }

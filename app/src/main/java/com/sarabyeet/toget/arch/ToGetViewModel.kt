@@ -41,7 +41,11 @@ class ToGetViewModel : ViewModel() {
         get() = _homeViewState
 
     // Used to determine the current sorting order in Home Fragment
-    private var currentSort = ToGetEvents.HomeViewState.Sort.NONE
+    var currentSort = ToGetEvents.HomeViewState.Sort.NONE
+        set(value) {
+            field = value
+            updateHomeViewState(itemWithCategoryLiveData.value!!)
+        }
 
     // Initialize the connectivity of our FLows with db for Item Entities and Category Entities
     fun init(appDatabase: AppDatabase) {
@@ -78,7 +82,6 @@ class ToGetViewModel : ViewModel() {
 
         when (currentSort) {
             ToGetEvents.HomeViewState.Sort.NONE -> {
-
                 var currentPriority = -1
                 items.sortedByDescending { it.itemEntity.priority }.forEach { item ->
                     if (item.itemEntity.priority != currentPriority) {
@@ -93,10 +96,49 @@ class ToGetViewModel : ViewModel() {
                     dataList.add(dataItem)
                 }
             }
-            ToGetEvents.HomeViewState.Sort.CATEGORY -> {}
-            ToGetEvents.HomeViewState.Sort.NEWEST -> {}
-            ToGetEvents.HomeViewState.Sort.OLDEST -> {}
+            ToGetEvents.HomeViewState.Sort.CATEGORY -> {
+                var currentCategory = "No id"
+                items.sortedBy { it.categoryEntity?.name ?: CategoryEntity.DEFAULT_CATEGORY_ID }
+                    .forEach { item ->
+                        if (item.itemEntity.categoryId != currentCategory) {
+                            currentCategory = item.itemEntity.categoryId
+                            val headerItem = ToGetEvents.HomeViewState.DataItem(
+                                data = item.categoryEntity?.name
+                                    ?: CategoryEntity.DEFAULT_CATEGORY_ID,
+                                isHeader = true
+                            )
+                            dataList.add(headerItem)
+                        }
+                        val dataItem = ToGetEvents.HomeViewState.DataItem(data = item)
+                        dataList.add(dataItem)
+                    }
+            }
+            ToGetEvents.HomeViewState.Sort.NEWEST -> {
+                val headerItem = ToGetEvents.HomeViewState.DataItem(
+                    data = "Newest",
+                    isHeader = true
+                )
+                dataList.add(headerItem)
+
+                items.sortedByDescending { it.itemEntity.createdAt }.forEach { item ->
+                    val dataItem = ToGetEvents.HomeViewState.DataItem(data = item)
+                    dataList.add(dataItem)
+                }
+            }
+            ToGetEvents.HomeViewState.Sort.OLDEST -> {
+                val headerItem = ToGetEvents.HomeViewState.DataItem(
+                    data = "Oldest",
+                    isHeader = true
+                )
+                dataList.add(headerItem)
+
+                items.sortedBy { it.itemEntity.createdAt }.forEach { item ->
+                    val dataItem = ToGetEvents.HomeViewState.DataItem(data = item)
+                    dataList.add(dataItem)
+                }
+            }
         }
+        // Posting data to Home ViewState after the sort is selected.
         _homeViewState.postValue(
             ToGetEvents.HomeViewState(
                 dataList = dataList,
@@ -171,6 +213,12 @@ class ToGetViewModel : ViewModel() {
         viewModelScope.launch {
             itemRepository.updateItem(itemEntity)
             transactionChannel.send(ToGetEvents.DbTransaction(true))
+        }
+    }
+
+    fun updateItemPriority(itemEntity: ItemEntity) {
+        viewModelScope.launch {
+            itemRepository.updateItem(itemEntity)
         }
     }
     // endregion Item Entity

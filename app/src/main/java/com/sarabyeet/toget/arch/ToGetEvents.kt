@@ -37,8 +37,8 @@ sealed class ToGetEvents {
         enum class Sort(val displayName: String) {
             NONE("None"),
             CATEGORY("Category"),
-            NEWEST("Newest"),
             OLDEST("Oldest"),
+            NEWEST("Newest"),
         }
     }
     // endregion Home View State

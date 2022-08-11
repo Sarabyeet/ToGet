@@ -13,10 +13,13 @@
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/drawable/ic_person_24.xml" value="0.3085" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout-v28/model_item_entity.xml" value="0.322463768115942" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/activity_main.xml" value="0.26992753623188404" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/custom_color_seek_bar.xml" value="0.5" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_add_category.xml" value="0.291213768115942" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_add_item.xml" value="0.36096014492753625" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_custom_color.xml" value="0.31431159420289856" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_home.xml" value="0.17831813576494426" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_profile.xml" value="0.32065217391304346" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/fragment_sort_order_bottom_sheet.xml" value="0.23867753623188406" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_category_entity.xml" value="0.5122302158273381" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_category_item_selection.xml" value="0.30434782608695654" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_category_view_state_item.xml" value="0.30434782608695654" />
@@ -25,7 +28,9 @@
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_item_entity.xml" value="0.42733188720173537" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_item_header.xml" value="0.33" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_loading.xml" value="0.31521739130434784" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/layout/model_sort_order_item.xml" value="0.31431159420289856" />
         <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.37083333333333335" />
+        <entry key="..\:/Personal/Coding new/AndroidRevision/ToGet/app/src/main/res/menu/menu_home_fragment.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

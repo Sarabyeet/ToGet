@@ -1,6 +1,7 @@
 package com.sarabyeet.toget.ui.fragments.profile
 
 import com.airbnb.epoxy.EpoxyController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sarabyeet.toget.R
 import com.sarabyeet.toget.addHeaderModel
 import com.sarabyeet.toget.databinding.ModelCategoryEntityBinding
@@ -41,6 +42,18 @@ data class CategoryEntityEpoxy(
         categoryTextView.text = category.name
         root.setOnClickListener {
             categoryEntityActions.onClickCategory(category)
+        }
+        root.setOnLongClickListener {
+            MaterialAlertDialogBuilder(it.context)
+                .setTitle("Delete ${category.name}?")
+                .setNegativeButton(it.resources.getString(R.string.cancel)) { dialog, which ->
+
+                }
+                .setPositiveButton(it.resources.getString(R.string.ok)) { dialog, which ->
+                    categoryEntityActions.onDeleteCategory(category)
+                }
+                .show()
+            return@setOnLongClickListener true
         }
     }
 }

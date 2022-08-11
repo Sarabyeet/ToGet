@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_profileFragment_to_addCategoryFragment"
             app:destination="@id/addCategoryFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_customColorFragment"
+            app:destination="@id/customColorFragment" />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
@@ -45,5 +48,14 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+    </fragment>
+    <fragment
+        android:id="@+id/customColorFragment"
+        android:name="com.sarabyeet.toget.ui.fragments.color.CustomColorFragment"
+        android:label="CustomColorFragment"
+        tools:layout="@layout/fragment_custom_color">
+        <argument
+            android:name="priorityName"
+            app:argType="string" />
     </fragment>
 </navigation>

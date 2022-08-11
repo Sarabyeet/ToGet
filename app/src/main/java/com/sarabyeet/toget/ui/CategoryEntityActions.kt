@@ -4,4 +4,5 @@ import com.sarabyeet.toget.db.model.CategoryEntity
 
 interface CategoryEntityActions {
     fun onClickCategory(category: CategoryEntity)
+    fun onDeleteCategory(category: CategoryEntity)
 }

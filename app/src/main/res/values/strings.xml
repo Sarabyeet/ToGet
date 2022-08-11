@@ -9,4 +9,8 @@
     <string name="quantity">Quantity</string>
     <string name="priority">Priority</string>
     <string name="category">Category</string>
+    <string name="sort_order">Sort Order</string>
+    <string name="sort">Sort</string>
+    <string name="ok">ok</string>
+    <string name="cancel">cancel</string>
 </resources>
