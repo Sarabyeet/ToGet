@@ -4,9 +4,6 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sarabyeet.toget.util.UserColorsObject
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class CustomColorViewModel : ViewModel() {
