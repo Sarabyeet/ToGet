@@ -52,7 +52,7 @@
     <fragment
         android:id="@+id/customColorFragment"
         android:name="com.sarabyeet.toget.ui.fragments.color.CustomColorFragment"
-        android:label="CustomColorFragment"
+        android:label="Customize Color"
         tools:layout="@layout/fragment_custom_color">
         <argument
             android:name="priorityName"

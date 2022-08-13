@@ -1,4 +1,4 @@
-package com.sarabyeet.toget
+package com.sarabyeet.toget.util
 
 import android.content.Context
 import android.view.View

@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.sarabyeet.toget.databinding.FragmentProfileBinding
 import com.sarabyeet.toget.db.model.CategoryEntity
-import com.sarabyeet.toget.ui.CategoryEntityActions
+import com.sarabyeet.toget.ui.ProfileScreenActions
 import com.sarabyeet.toget.ui.fragments.BaseFragment
+import com.sarabyeet.toget.util.UserColorsObject
 
-class ProfileFragment : BaseFragment(), CategoryEntityActions {
+class ProfileFragment : BaseFragment(), ProfileScreenActions {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -37,9 +39,28 @@ class ProfileFragment : BaseFragment(), CategoryEntityActions {
         }
         swipeToDelete()
 
-        binding.epoxyRecyclerView.postDelayed({
-            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToCustomColorFragment("High"))
-        }, 1_000)
+        UserColorsObject.userData.apply {
+            lifecycleScope.launchWhenCreated {
+                getHighPriorityColor().collect {
+                    profileController.highPriority = it
+                }
+            }
+            lifecycleScope.launchWhenCreated {
+                getMediumPriorityColor().collect {
+                    profileController.mediumPriority = it
+                }
+            }
+            lifecycleScope.launchWhenCreated {
+                getLowPriorityColor().collect {
+                    profileController.lowPriority = it
+                }
+            }
+        }
+
+//        binding.epoxyRecyclerView.postDelayed({
+//            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToCustomColorFragment(
+//                "High"))
+//        }, 1_000)
     }
 
     private fun swipeToDelete() {
@@ -86,5 +107,9 @@ class ProfileFragment : BaseFragment(), CategoryEntityActions {
 
     override fun onDeleteCategory(category: CategoryEntity) {
         sharedViewModel.deleteCategory(category)
+    }
+
+    override fun onPrioritySelected(priorityName: String) {
+        findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToCustomColorFragment(priorityName))
     }
 }

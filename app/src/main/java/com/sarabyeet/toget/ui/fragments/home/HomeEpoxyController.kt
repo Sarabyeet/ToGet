@@ -1,17 +1,16 @@
 package com.sarabyeet.toget.ui.fragments.home
 
-import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyController
 import com.sarabyeet.toget.R
-import com.sarabyeet.toget.addHeaderModel
 import com.sarabyeet.toget.arch.ToGetEvents
 import com.sarabyeet.toget.databinding.ModelEmptyStateBinding
 import com.sarabyeet.toget.databinding.ModelItemEntityBinding
 import com.sarabyeet.toget.db.model.ItemWithCategoryEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
 import com.sarabyeet.toget.ui.epoxy.LoadingEpoxyModel
+import com.sarabyeet.toget.util.addHeaderModel
 import com.sarabyeet.travelapp.ui.epoxy.ViewBindingKotlinModel
 
 class HomeEpoxyController(
@@ -19,6 +18,24 @@ class HomeEpoxyController(
 ) : EpoxyController() {
 
     var viewState = ToGetEvents.HomeViewState(isLoading = true)
+        set(value) {
+            field = value
+            requestModelBuild()
+        }
+
+    var highPriority = 0
+        set(value) {
+            field = value
+            requestModelBuild()
+        }
+
+    var mediumPriority = 0
+        set(value) {
+            field = value
+            requestModelBuild()
+        }
+
+    var lowPriority = 0
         set(value) {
             field = value
             requestModelBuild()
@@ -41,7 +58,7 @@ class HomeEpoxyController(
             }
 
             val itemWithCategoryEntity = dataItem.data as ItemWithCategoryEntity
-            ItemEntityEpoxyModel(itemWithCategoryEntity, itemEntityActions)
+            ItemEntityEpoxyModel(itemWithCategoryEntity, itemEntityActions, highPriority, mediumPriority, lowPriority)
                 .id(itemWithCategoryEntity.itemEntity.id)
                 .addTo(this)
         }
@@ -51,6 +68,9 @@ class HomeEpoxyController(
     data class ItemEntityEpoxyModel(
         val item: ItemWithCategoryEntity,
         val itemEntityActions: ItemEntityActions,
+        val highPriorityColor: Int,
+        val mediumPriorityColor: Int,
+        val lowPriorityColor: Int,
     ) : ViewBindingKotlinModel<ModelItemEntityBinding>(R.layout.model_item_entity) {
         override fun ModelItemEntityBinding.bind() {
             titleTextView.text = item.itemEntity.title
@@ -61,7 +81,7 @@ class HomeEpoxyController(
                 descriptionTextView.text = item.itemEntity.description
             }
 
-            priorityTextView.setOnClickListener {
+            priorityImageView.setOnClickListener {
                 itemEntityActions.onBumpPriority(item.itemEntity)
             }
 
@@ -70,21 +90,15 @@ class HomeEpoxyController(
             root.setOnClickListener {
                 itemEntityActions.onClickItem(item.itemEntity)
             }
-            val colorDrawable = when (item.itemEntity.priority) {
-                1 -> R.drawable.circle_green
-                2 -> R.drawable.circle_yellow
-                3 -> R.drawable.circle_red
+            val color = when (item.itemEntity.priority) {
+                1 -> lowPriorityColor
+                2 -> mediumPriorityColor
+                3 -> highPriorityColor
                 else -> R.drawable.circle_red
             }
-            priorityTextView.setBackgroundResource(colorDrawable)
+            priorityImageView.drawable.setTint(color)
 
-            val cardStrokeColor = when (item.itemEntity.priority) {
-                1 -> R.color.Green
-                2 -> R.color.Yellow
-                3 -> R.color.Red
-                else -> R.color.purple_200
-            }
-            root.strokeColor = ContextCompat.getColor(root.context, cardStrokeColor)
+            root.strokeColor = color
         }
     }
 

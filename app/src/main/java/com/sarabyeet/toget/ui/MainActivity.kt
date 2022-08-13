@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sarabyeet.toget.R
 import com.sarabyeet.toget.arch.ToGetViewModel
 import com.sarabyeet.toget.db.AppDatabase
+import com.sarabyeet.toget.util.UserColorsObject
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,6 +55,9 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.isGone = true
             }
         }
+
+        // DataStore for color settings
+        UserColorsObject.init(this)
     }
 
     override fun onSupportNavigateUp(): Boolean {

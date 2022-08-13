@@ -10,7 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.sarabyeet.toget.arch.ToGetEvents
 import com.sarabyeet.toget.databinding.FragmentAddCategoryBinding
 import com.sarabyeet.toget.db.model.CategoryEntity
-import com.sarabyeet.toget.showKeyboard
+import com.sarabyeet.toget.util.showKeyboard
 import com.sarabyeet.toget.ui.fragments.BaseFragment
 import java.util.*
 

@@ -1,8 +1,13 @@
 package com.sarabyeet.toget.arch
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.sarabyeet.toget.util.UserColorsObject
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class CustomColorViewModel : ViewModel() {
 
@@ -22,8 +27,23 @@ class CustomColorViewModel : ViewModel() {
 
     private lateinit var priorityName: String
 
-    fun setPriorityName(priorityName: String) {
+    fun setPriorityName(priorityName: String, colorInt: Int, progressCallback: (Int, Int, Int) -> Unit) {
         this.priorityName = priorityName
+        val color = Color.valueOf(colorInt)
+        val redColor = (color.red() * 255).roundToInt()
+        val greenColor = (color.green() * 255).roundToInt()
+        val blueColor = (color.blue() * 255).roundToInt()
+
+        progressCallback(redColor, greenColor, blueColor)
+
+        _viewStateLiveData.postValue(
+            ViewState(
+                red = redColor,
+                green = greenColor,
+                blue = blueColor,
+                priorityName = priorityName
+            )
+        )
     }
 
     fun onRedChange(value: Int) {

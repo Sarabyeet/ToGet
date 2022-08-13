@@ -67,7 +67,7 @@
             android:textColor="?attr/colorOnPrimary"
             android:textSize="20sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toTopOf="@id/priorityTextView"
+            app:layout_constraintBottom_toTopOf="@id/priorityImageView"
             app:layout_constraintStart_toStartOf="@id/radioGroup"
             app:layout_constraintTop_toBottomOf="@+id/descriptionTextField"
             app:layout_constraintVertical_bias="0.0" />
@@ -80,12 +80,12 @@
             android:layout_marginTop="16dp"
             android:max="10"
             android:min="1"
-            app:layout_constraintBottom_toTopOf="@id/priorityTextView"
+            app:layout_constraintBottom_toTopOf="@id/priorityImageView"
             app:layout_constraintStart_toStartOf="@id/quantityTextView"
             app:layout_constraintTop_toBottomOf="@id/quantityTextView" />
 
         <TextView
-            android:id="@+id/priorityTextView"
+            android:id="@+id/priorityImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -105,7 +105,7 @@
             android:checkedButton="@id/lowPriorityBtn"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/priorityTextView">
+            app:layout_constraintTop_toBottomOf="@id/priorityImageView">
 
             <RadioButton
                 android:id="@+id/lowPriorityBtn"

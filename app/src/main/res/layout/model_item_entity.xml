@@ -12,7 +12,7 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
     app:strokeColor="@color/black"
-    app:strokeWidth="3px">
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:textColor="?attr/colorOnPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/priorityTextView"
+            app:layout_constraintEnd_toStartOf="@+id/priorityImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Title goes here" />
@@ -64,12 +64,12 @@
             app:layout_constraintStart_toEndOf="@id/descriptionTextView"
             tools:text="Description" />
 
-        <TextView
-            android:id="@+id/priorityTextView"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/priorityImageView"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/circle_green"
+            app:srcCompat="@drawable/circle_green"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

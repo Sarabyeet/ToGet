@@ -15,7 +15,7 @@ import com.sarabyeet.toget.databinding.FragmentAddItemBinding
 import com.sarabyeet.toget.db.model.CategoryEntity
 import com.sarabyeet.toget.db.model.ItemEntity
 import com.sarabyeet.toget.db.model.ItemWithCategoryEntity
-import com.sarabyeet.toget.showKeyboard
+import com.sarabyeet.toget.util.showKeyboard
 import com.sarabyeet.toget.ui.fragments.BaseFragment
 import java.util.*
 

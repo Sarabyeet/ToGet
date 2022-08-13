@@ -6,7 +6,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.sarabyeet.toget.R
 import com.sarabyeet.toget.arch.ToGetEvents
 import com.sarabyeet.toget.databinding.ModelCategoryViewStateItemBinding
-import com.sarabyeet.toget.getAttrColor
+import com.sarabyeet.toget.util.getAttrColor
 import com.sarabyeet.toget.ui.epoxy.LoadingEpoxyModel
 import com.sarabyeet.travelapp.ui.epoxy.ViewBindingKotlinModel
 

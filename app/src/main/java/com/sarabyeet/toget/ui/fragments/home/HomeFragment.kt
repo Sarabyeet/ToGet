@@ -1,10 +1,13 @@
 package com.sarabyeet.toget.ui.fragments.home
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +17,8 @@ import com.sarabyeet.toget.db.model.ItemEntity
 import com.sarabyeet.toget.ui.ItemEntityActions
 import com.sarabyeet.toget.ui.fragments.BaseFragment
 import com.sarabyeet.toget.ui.fragments.home.bottomsheet.SortOrderBottomSheet
+import com.sarabyeet.toget.util.UserColorsObject
+import kotlinx.coroutines.flow.collect
 
 class HomeFragment : BaseFragment(), ItemEntityActions {
     private var _binding: FragmentHomeBinding? = null
@@ -63,6 +68,25 @@ class HomeFragment : BaseFragment(), ItemEntityActions {
 
         sharedViewModel.homeViewState.observe(viewLifecycleOwner) { viewState ->
             controller.viewState = viewState
+        }
+
+        // Setting up priority color as per user choice from datastore preferences
+        UserColorsObject.userData.apply {
+            lifecycleScope.launchWhenCreated {
+                getHighPriorityColor().collect {
+                    controller.highPriority = it
+                }
+            }
+            lifecycleScope.launchWhenCreated {
+                getMediumPriorityColor().collect {
+                    controller.mediumPriority = it
+                }
+            }
+            lifecycleScope.launchWhenCreated {
+                getLowPriorityColor().collect {
+                    controller.lowPriority = it
+                }
+            }
         }
 
         // Swipe-to-delete Epoxy
