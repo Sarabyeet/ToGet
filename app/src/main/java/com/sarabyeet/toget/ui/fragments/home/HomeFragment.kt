@@ -1,8 +1,6 @@
 package com.sarabyeet.toget.ui.fragments.home
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -18,7 +16,6 @@ import com.sarabyeet.toget.ui.ItemEntityActions
 import com.sarabyeet.toget.ui.fragments.BaseFragment
 import com.sarabyeet.toget.ui.fragments.home.bottomsheet.SortOrderBottomSheet
 import com.sarabyeet.toget.util.UserColorsObject
-import kotlinx.coroutines.flow.collect
 
 class HomeFragment : BaseFragment(), ItemEntityActions {
     private var _binding: FragmentHomeBinding? = null
